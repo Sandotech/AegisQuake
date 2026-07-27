@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap');
+
+body {
+    font-family: var(--fuente-principal);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--fuente-titulos);
+    line-height: 1.2;
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; }
+h2 { font-size: clamp(1.35rem, 3vw, 1.875rem); font-weight: 700; }
+h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 700; }
+
+p {
+    color: var(--color-texto-secundario);
+    line-height: 1.7;
+}
+
+.boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacio-sm);
+    padding: var(--espacio-md) var(--espacio-xl);
+    border-radius: var(--radio-lg);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all var(--transicion-rapida);
+}
+
+.boton-principal {
+    background: var(--color-principal);
+    color: #fff;
+    box-shadow: var(--sombra-md);
+}
+
+.boton-principal:hover {
+    background: var(--color-secundario);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-lg);
+}
+
+.boton-secundario {
+    background: transparent;
+    color: var(--color-principal);
+    border: 2px solid var(--color-borde);
+}
+
+.boton-secundario:hover {
+    border-color: var(--color-principal);
+    background: var(--color-acento);
+}
+
+.boton-saltar {
+    background: transparent;
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+    padding: var(--espacio-sm) var(--espacio-md);
+}
+
+.boton-saltar:hover {
+    color: var(--color-principal);
+}
