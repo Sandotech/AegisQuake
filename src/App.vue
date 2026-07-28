@@ -2,9 +2,9 @@
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import FabEmergencia from "@/components/FabEmergencia.vue";
-import { useTema } from "@/composables/useTema";
+import { useConfiguracionStore } from "@/stores/configuracion";
 
-useTema();
+const config = useConfiguracionStore();
 </script>
 
 <template>

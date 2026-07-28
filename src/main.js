@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import "./styles/variables.css";
+import "./styles/tema-oscuro.css";
 import "./styles/reset.css";
 import "./styles/base.css";
 

@@ -4,8 +4,8 @@ import { useTema } from "@/composables/useTema";
 import { useContactos } from "@/composables/useContactos";
 
 export const useConfiguracionStore = defineStore("configuracion", () => {
-    const tema = useTema();
-    const contactosComp = useContactos();
+    const { tema, alternar: alternarTema, establecer: establecerTema } = useTema();
+    const { contactos, actualizar: actualizarContacto } = useContactos();
 
     const linternaActiva = ref(false);
 
@@ -14,10 +14,11 @@ export const useConfiguracionStore = defineStore("configuracion", () => {
     }
 
     return {
-        tema: tema.tema,
-        alternarTema: tema.alternar,
-        contactos: contactosComp.contactos,
-        actualizarContacto: contactosComp.actualizar,
+        tema,
+        alternarTema,
+        establecerTema,
+        contactos,
+        actualizarContacto,
         linternaActiva: computed(() => linternaActiva.value),
         alternarLinterna,
     };
