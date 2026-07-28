@@ -6,6 +6,22 @@ Construido con **Vue 3 + Vite + Vue Router + Pinia**.
 
 ---
 
+## 📑 Tabla de contenidos
+
+- [📋 Requisitos previos](#-requisitos-previos)
+- [🚀 Instalación rápida](#-instalación-rápida)
+- [🛠️ Comandos disponibles](#️-comandos-disponibles)
+- [📁 Estructura del proyecto](#-estructura-del-proyecto)
+- [🎨 Convenciones de código](#-convenciones-de-código)
+- [➕ Cómo agregar una nueva vista](#-cómo-agregar-una-nueva-vista)
+- [🔌 Cómo agregar un composable](#-cómo-agregar-un-composable)
+- [🤝 Cómo colaborar en este proyecto](#-cómo-colaborar-en-este-proyecto)
+- [🎯 Características principales](#-características-principales)
+- [🛣️ Roadmap](#️-roadmap)
+- [📞 Contactos de emergencia Venezuela](#-contactos-de-emergencia-venezuela)
+
+---
+
 ## 📋 Requisitos previos
 
 - **Node.js** versión 18 o superior ([descargar](https://nodejs.org/))
