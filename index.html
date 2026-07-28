@@ -1,73 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnóstico de Emergencias | Exposucre</title>
-    <link rel="icon" type="image/svg+xml" href="assets/images/logo-placeholder.svg">
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/cuestionario.css">
-    <link rel="stylesheet" href="css/resultados.css">
-    <link rel="stylesheet" href="css/responsive.css">
-</head>
-<body>
-    <main>
-        <section id="cuestionario" class="cuestionario" aria-label="Cuestionario de diagnóstico">
-
-            <div class="barra-progreso" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                <div class="barra-progreso__relleno" id="rellenoProgreso"></div>
-            </div>
-            <div class="progreso-info" id="infoProgreso"></div>
-
-            <div class="cuestionario__viewport" id="viewportCuestionario">
-
-                <div class="cuestionario__diapositiva activa" data-paso="0">
-                    <img src="assets/images/logo-placeholder.svg" alt="Logo de emergencias" class="cuestionario__imagen">
-                    <h1 class="cuestionario__titulo">Diagnóstico de Emergencias</h1>
-                    <p class="cuestionario__subtitulo">Evalúa qué tan preparado estás ante emergencias naturales. Solo 4 preguntas rápidas.</p>
-                    <div class="cuestionario__acciones cuestionario__acciones--inicio">
-                        <button class="boton boton-principal boton-siguiente" data-accion="iniciar">Comenzar Diagnóstico</button>
-                        <button class="boton boton-saltar" data-accion="saltar">Saltar</button>
-                    </div>
-                </div>
-
-                <!-- Preguntas (generados por JS) -->
-                <div id="contenedorPreguntas"></div>
-
-            </div>
-        </section>
-
-        <!-- RESULTADOS (oculto inicialmente) -->
-        <section id="resultados" class="resultados" aria-label="Resultados del diagnóstico" style="display: none;">
-            <div class="resultados__tarjeta" id="tarjetaResultados">
-                <div class="resultados__semaforo">
-                    <div class="semaforo__luces">
-                        <div class="semaforo__luz semaforo__luz--rojo" id="luzRojo"></div>
-                        <div class="semaforo__luz semaforo__luz--amarillo" id="luzAmarillo"></div>
-                        <div class="semaforo__luz semaforo__luz--verde" id="luzVerde"></div>
-                    </div>
-                </div>
-                <div class="resultados__porcentaje" id="porcentajeResultado"></div>
-                <div class="resultados__etiqueta">Tu Índice de Preparación</div>
-                <div class="resultados__divisor" id="divisorResultado"></div>
-                <div class="resultados__categoria" id="categoriaResultado"></div>
-                <p class="resultados__mensaje" id="mensajeResultado"></p>
-                <div class="resultados__consejos" id="consejosResultado">
-                    <h4>Recomendaciones</h4>
-                    <ul id="listaConsejos"></ul>
-                </div>
-                <div class="resultados__acciones">
-                    <a href="principal.html" class="boton boton-principal">Panel de Control de Monitoreo</a>
-                    <a href="emergencia.html" class="boton boton-secundario">En Caso de Emergencia</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="js/preguntas.js"></script>
-    <script src="js/cuestionario.js"></script>
-    <script src="js/resultados.js"></script>
-</body>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#1B4EF5" />
+        <meta name="description" content="Centro de Emergencia - Diagnóstico y guías de actuación ante emergencias naturales" />
+        <title>Centro de Emergencia | Exposucre</title>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="module" src="/src/main.js"></script>
+    </body>
 </html>

@@ -1,18 +1,183 @@
-# Proyecto de Diagnóstico de Emergencias
+# Centro de Emergencia | Exposucre
 
-Plataforma educativa para la preparación ante desastres naturales.
+Plataforma educativa para la preparación ante desastres naturales. Diagnóstico interactivo, guías de actuación, mochila 72, primeros auxilios y contactos de emergencia.
 
----
-
-## 📖 ¿Cómo colaborar en este proyecto?
-
-Esta guía está pensada para **personas sin experiencia previa con Git o GitHub**. Si ya sabes usar Git, salta a la sección que necesites.
+Construido con **Vue 3 + Vite + Vue Router + Pinia**.
 
 ---
 
-### 📦 1. Instalar Git (si no lo tienes)
+## 📋 Requisitos previos
 
-Git es el programa que usamos para controlar las versiones del proyecto.
+- **Node.js** versión 18 o superior ([descargar](https://nodejs.org/))
+- **npm** (se instala con Node.js)
+- **Git** ([descargar](https://git-scm.com/))
+
+Verificar instalación:
+```bash
+node --version    # debe mostrar v18+ o v20+
+npm --version     # debe mostrar 9+ o 10+
+git --version
+```
+
+---
+
+## 🚀 Instalación rápida
+
+```bash
+# 1. Clonar el repositorio
+git clone <URL-del-repositorio>
+cd expomierda
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Iniciar servidor de desarrollo
+npm run dev
+```
+
+El servidor se abrirá automáticamente en `http://localhost:5173`.
+
+---
+
+## 🛠️ Comandos disponibles
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm run dev` | Inicia el servidor de desarrollo con hot-reload |
+| `npm run build` | Genera la versión de producción en `dist/` |
+| `npm run preview` | Sirve la versión de producción localmente |
+| `npm run serve` | Inicia el servidor accesible desde otros dispositivos en la red |
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+expomierda/
+├── public/                    # Archivos estáticos
+│   └── favicon.svg
+├── src/
+│   ├── assets/                # Imágenes
+│   ├── components/            # Componentes Vue reutilizables
+│   │   ├── AppHeader.vue      # Header sticky con logo y navegación
+│   │   ├── AppFooter.vue      # Footer
+│   │   ├── FabEmergencia.vue  # Botón flotante de 911
+│   │   ├── BtnTema.vue        # Toggle modo oscuro
+│   │   ├── HeroCard.vue       # Hero reutilizable
+│   │   ├── HeroMiniTarjeta.vue
+│   │   ├── GuiaCard.vue       # Tarjeta de guía de emergencia
+│   │   ├── ChecklistItem.vue  # Item individual de checklist
+│   │   ├── CategoriaChecklist.vue
+│   │   ├── TarjetaAuxilio.vue # Tarjeta de primeros auxilios
+│   │   ├── ContactoCard.vue   # Tarjeta de contacto
+│   │   ├── ContadorProgreso.vue # Anillo SVG de progreso
+│   │   ├── SemaforoResultado.vue
+│   │   └── OpcionCuestionario.vue
+│   ├── views/                 # Páginas
+│   │   ├── VistaInicio.vue    # Cuestionario diagnóstico
+│   │   ├── VistaEmergencia.vue # Centro de emergencia
+│   │   └── VistaPrincipal.vue # Panel de monitoreo Arduino
+│   ├── composables/           # Lógica reutilizable (Composition API)
+│   │   ├── useTema.js
+│   │   ├── useChecklist.js
+│   │   ├── useContactos.js
+│   │   ├── useCuestionario.js
+│   │   └── useResultados.js
+│   ├── stores/                # Pinia stores
+│   │   ├── preparacion.js
+│   │   └── configuracion.js
+│   ├── data/                  # Datos estáticos
+│   │   └── preguntas.js
+│   ├── router/                # Vue Router
+│   │   └── index.js
+│   ├── styles/                # Estilos globales
+│   │   ├── variables.css
+│   │   ├── reset.css
+│   │   └── base.css
+│   ├── App.vue                # Componente raíz
+│   └── main.js                # Punto de entrada
+├── index.html                 # HTML de entrada (Vite)
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+---
+
+## 🎨 Convenciones de código
+
+### Componentes Vue
+
+- Cada componente es un **Single File Component** (SFC) con `<script setup>`, `<template>` y `<style scoped>`.
+- Nombres en **PascalCase** y con sufijo descriptivo (`HeroCard.vue`, `FabEmergencia.vue`).
+- Los estilos van con `<style scoped>` para evitar fugas entre componentes.
+
+### Composables
+
+- Funciones que empiezan con `use` (`useTema`, `useChecklist`).
+- Encapsulan lógica reactiva reutilizable.
+- Se importan directamente en los componentes que los necesitan.
+
+### Stores (Pinia)
+
+- Para estado global que se comparte entre múltiples componentes.
+- Se accede con `useStoreNameStore()`.
+
+### CSS
+
+- **Variables CSS** en `src/styles/variables.css` (colores, espaciados, tipografías).
+- Usar `var(--nombre-variable)` en lugar de valores hardcodeados.
+- Clases en **kebab-case** y siguiendo convención BEM (`guia__titulo`, `contacto-card--destacado`).
+
+---
+
+## ➕ Cómo agregar una nueva vista
+
+1. Crear `src/components/MiComponente.vue`
+2. Crear `src/views/MiVista.vue` (importando el componente)
+3. Agregar la ruta en `src/router/index.js`:
+   ```js
+   {
+       path: "/mi-ruta",
+       name: "mi-ruta",
+       component: () => import("@/views/MiVista.vue"),
+       meta: { titulo: "Mi Vista" },
+   }
+   ```
+4. Acceder vía `<router-link to="/mi-ruta">` o `router.push("/mi-ruta")`.
+
+---
+
+## 🔌 Cómo agregar un composable
+
+1. Crear `src/composables/useMiLogica.js`:
+   ```js
+   import { ref, computed } from "vue";
+
+   export function useMiLogica() {
+       const estado = ref(0);
+       const duplicado = computed(() => estado.value * 2);
+
+       function incrementar() {
+           estado.value++;
+       }
+
+       return { estado, duplicado, incrementar };
+   }
+   ```
+2. Importar en cualquier componente:
+   ```js
+   import { useMiLogica } from "@/composables/useMiLogica";
+   const { estado, incrementar } = useMiLogica();
+   ```
+
+---
+
+## 🤝 Cómo colaborar en este proyecto
+
+Esta guía está pensada para **personas sin experiencia previa con Git o GitHub**.
+
+### 1. Instalar Git
 
 #### Windows
 1. Ve a https://git-scm.com/download/win
@@ -23,296 +188,119 @@ Git es el programa que usamos para controlar las versiones del proyecto.
 #### macOS
 1. Abre la Terminal (Busca "Terminal" en Spotlight)
 2. Escribe: `git --version`
-3. Si no está instalado, te aparecerá una ventana para instalarlo. Sigue las instrucciones.
+3. Si no está instalado, te aparecerá una ventana para instalarlo.
 
 #### Linux (Ubuntu/Debian)
-Abre la terminal y escribe:
 ```bash
 sudo apt update
 sudo apt install git -y
 ```
 
-#### Verificar instalación
-En tu terminal, escribe:
-```bash
-git --version
-```
-Deberías ver algo como `git version 2.x.x`. Si ves eso, ¡listo!
-
----
-
-### 🔑 2. Configurar Git por primera vez
-
-Después de instalar Git, abre tu terminal y escribe estos dos comandos (reemplaza con tu nombre y correo):
+### 2. Configurar Git (solo la primera vez)
 
 ```bash
-git config --global user.name "Tu Nombre o Usuario"
+git config --global user.name "Tu Nombre"
 git config --global user.email "tu-email@ejemplo.com"
 ```
 
-Esto solo se hace **una vez** en tu computadora.
+### 3. Flujo de trabajo
 
----
-
-### 🍴 3. Obtener el proyecto en tu computadora
-
-#### Opción A: Clonar el repositorio (recomendado)
-
-1. Ve a la página del proyecto en GitHub
-2. Haz clic en el botón verde **"Code"**
-3. Copia la URL que aparece (termina en `.git`)
-4. Abre tu terminal y escribe:
+#### Crear una rama para tu cambio
 
 ```bash
-git clone <URL-del-repositorio>
+# Asegúrate de estar en main y tener lo último
+git checkout main
+git pull origin main
+
+# Crear tu rama
+git checkout -b mi-nueva-funcionalidad
 ```
 
-Ejemplo:
-```bash
-git clone https://github.com/usuario/expomierda.git
-```
-
-5. Entra a la carpeta del proyecto:
-```bash
-cd expomierda
-```
-
-#### Opción B: Descargar el ZIP
-
-1. Ve a la página del proyecto en GitHub
-2. Haz clic en **"Code"** → **"Download ZIP"**
-3. Descomprime el archivo en tu computadora
-4. Abre la terminal y navega hasta la carpeta:
-```bash
-cd ruta/donde/descomprimiste/expomierda
-```
-
----
-
-### 🌿 4. Crear una rama (branch) para trabajar
-
-**¿Qué es una rama?** Es una copia del proyecto donde puedes hacer tus cambios sin afectar el original. Piensa en ello como un "borrador" separado.
-
-NUNCA trabajes directamente en la rama `main` o `master`. Siempre crea tu propia rama.
-
-```bash
-git checkout -b nombre-de-tu-rama
-```
-
-Reglas para el nombre de la rama:
-- Usa minúsculas
-- Separa palabras con guiones (`-`)
-- Sé descriptivo pero corto
+Reglas para nombres:
+- minúsculas
+- guiones para separar palabras
+- descriptivo y corto
+- prefijos sugeridos: `feat/` (funcionalidad), `fix/` (corrección), `docs/` (documentación), `style/` (estilos)
 
 Ejemplos:
 ```bash
-git checkout -b agregar-iconos-mapa
-git checkout -b corregir-ortografia-preguntas
-git checkout -b seccion-tsunamis
-git checkout -b fix-boton-resultados
+git checkout -b feat/agregar-inundacion
+git checkout -b fix/typo-contactos
+git checkout -b docs/instrucciones-instalacion
 ```
 
----
-
-### ✏️ 5. Hacer cambios en el proyecto
-
-Ahora puedes abrir los archivos con cualquier editor de texto (Bloc de Notas, VSCode, Sublime, etc.) y hacer tus modificaciones.
-
-**Consejos:**
-- No cambies archivos que no estén relacionados con tu tarea
-- Si tienes dudas, pregunta antes de modificar
-- Guarda los archivos después de cada cambio (Ctrl+S)
-
----
-
-### 💾 6. Ver qué archivos cambiaste
-
-En la terminal, escribe:
+#### Hacer cambios y commits
 
 ```bash
+# Ver qué archivos modificaste
 git status
+
+# Agregar archivos
+git add .                              # todos
+git add src/components/MiComponente.vue # uno específico
+
+# Hacer commit
+git commit -m "Descripción breve del cambio"
 ```
 
-Esto te muestra una lista de los archivos que modificaste. Los archivos en rojo están sin seguimiento, los archivos en verde están listos para commit.
-
----
-
-### 📍 7. Preparar los archivos para el commit
-
-El "commit" es como tomar una **foto** del estado actual de tu trabajo. Pero antes debes decirle a Git qué archivos quieres incluir en esa foto.
-
-Para agregar **todos** los archivos que modificaste:
-```bash
-git add .
-```
-
-Para agregar **un archivo específico**:
-```bash
-git add ruta/del/archivo.html
-```
-
-Ejemplo:
-```bash
-git add css/emergencia.css
-```
-
-Vuelve a escribir `git status` para confirmar que los archivos ahora están en verde.
-
----
-
-### 📸 8. Hacer el commit (guardar la "foto")
-
-```bash
-git commit -m "Descripción breve de lo que hiciste"
-```
-
-Reglas para el mensaje del commit:
+Reglas para mensajes de commit:
 - Máximo 50 caracteres
-- En español (o inglés si el equipo prefiere)
-- Describe QUÉ hiciste, no por qué
+- Verbo en presente o infinitivo
+- Describir QUÉ hiciste
 
-Ejemplos:
+#### Subir tu rama
+
 ```bash
-git commit -m "Agrega sección de tsunamis a emergencia.html"
-git commit -m "Corrige error ortográfico en pregunta 3"
-git commit -m "Agrega estilos responsive a la página principal"
+git push origin mi-nueva-funcionalidad
 ```
 
-**Tip:** Si el mensaje es muy largo, puedes omitir `-m` y se abrirá un editor. En ese caso:
-1. Escribe tu mensaje
-2. Presiona `Ctrl+X` (o `Esc :wq` en Linux)
-3. Presiona `Y` para confirmar
-4. Presiona `Enter`
-
----
-
-### 📤 9. Subir tu rama a GitHub (push)
-
-Hasta ahora todo está en tu computadora. Para que los demás vean tus cambios, debes subirlos a GitHub.
-
-La primera vez que subes tu rama:
-```bash
-git push origin nombre-de-tu-rama
-```
-
-Ejemplo:
-```bash
-git push origin corregir-ortografia-preguntas
-```
-
-Si todo sale bien, verás un mensaje que dice algo como:
-```
- * [new branch]      corregir-ortografia-preguntas -> corregir-ortografia-preguntas
-```
-
-Si ya habías subido tu rama antes (solo estás actualizando cambios):
-```bash
-git push
-```
-
----
-
-### 🔀 10. Crear un Pull Request (PR)
-
-El Pull Request es una **solicitud para mezclar** tus cambios con la rama principal del proyecto.
+#### Crear Pull Request en GitHub
 
 1. Ve a la página del proyecto en GitHub
-2. Verás un banner amarillo que dice algo como: **"corregir-ortografia-preguntas had recent pushes"**
+2. Verás un banner amarillo: **"mi-nueva-funcionalidad had recent pushes"**
 3. Haz clic en **"Compare & pull request"**
-
-   Si no ves el banner:
-   - Haz clic en la pestaña **"Pull requests"**
-   - Haz clic en el botón verde **"New pull request"**
-   - En "base" asegúrate que sea `main`
-   - En "compare" selecciona tu rama (`nombre-de-tu-rama`)
-
-4. Escribe un título descriptivo para tu PR
-5. En la descripción, explica:
-   - ¿Qué cambios hiciste?
-   - ¿Por qué los hiciste?
-   - Si hay algo que el revisor debe saber
-
-6. Haz clic en **"Create pull request"**
+4. Escribe un título y descripción
+5. Haz clic en **"Create pull request"**
+6. Espera la revisión y aprobación
 
 ---
 
-### ✅ 11. ¿Y ahora qué?
+## 🎯 Características principales
 
-- Alguien del equipo revisará tu PR
-- Puede pedirte cambios o sugerencias
-- Si te piden cambios, solo hazlos en tu computadora, haz commit y push de nuevo (el PR se actualiza solo)
-- Cuando todo esté bien, alguien aprobará y mezclará tu PR
-
----
-
-### 🔄 12. Mantener tu rama actualizada
-
-Mientras trabajas, otros pueden haber hecho cambios en `main`. Para traer esos cambios a tu rama:
-
-```bash
-git checkout main
-git pull origin main
-git checkout nombre-de-tu-rama
-git merge main
-```
-
-Si hay conflictos (el mismo archivo fue modificado por dos personas), Git te lo dirá. Pregunta al equipo cómo resolverlo.
+- ✅ **Vue 3** con Composition API (`<script setup>`)
+- ✅ **Vite** para desarrollo rápido y builds optimizados
+- ✅ **Vue Router** con lazy loading de vistas
+- ✅ **Pinia** para estado global
+- ✅ **Modo oscuro** con persistencia
+- ✅ **Reactividad automática** (sin manipular DOM)
+- ✅ **Web Serial API** para conectar Arduino directamente
+- ✅ **Componentes reutilizables** (FAB, header, footer)
+- ✅ **Responsive** mobile-first
+- ✅ **Persistencia en localStorage** (checklist, contactos, tema)
 
 ---
 
-### 🧹 13. Después de que tu PR sea aprobado
+## 🛣️ Roadmap
 
-Puedes borrar tu rama (local y en GitHub) para mantener todo limpio:
-
-```bash
-git checkout main
-git pull origin main
-git branch -d nombre-de-tu-rama
-```
-
----
-
-### ❗ Resumen rápido (cheat sheet)
-
-```bash
-# 1. Clonar el proyecto
-git clone <URL-del-repositorio>
-cd proyecto
-
-# 2. Crear una rama
-git checkout -b mi-rama
-
-# 3. Hacer cambios en los archivos...
-
-# 4. Ver qué cambió
-git status
-
-# 5. Preparar archivos
-git add .
-
-# 6. Hacer commit
-git commit -m "Descripción de mis cambios"
-
-# 7. Subir la rama
-git push origin mi-rama
-
-# 8. Ir a GitHub y crear el Pull Request 🎉
-```
+- [ ] PWA (instalable, offline)
+- [ ] Mapa de zonas de riesgo
+- [ ] Notificaciones push para alertas sísmicas
+- [ ] Integración con APIs de sismos en tiempo real (USGS, etc.)
+- [ ] Plan familiar (puntos de encuentro, contactos)
+- [ ] Soporte multi-idioma
+- [ ] Tests unitarios con Vitest
 
 ---
 
-### ❓ Problemas comunes
+## 📞 Contactos de emergencia Venezuela
 
-| Problema | Solución |
-|----------|----------|
-| `git: command not found` | Git no está instalado. Ve a la sección 1 |
-| `Permission denied` | No tienes acceso al repositorio. Pide que te agreguen como colaborador |
-| El push no funciona | ¿Estás parado dentro de la carpeta del proyecto? Usa `cd expomierda` |
-| `Merge conflict` | Dos personas editaron el mismo archivo. No entres en pánico. Pregunta al equipo |
-| No veo mis cambios en GitHub | Asegúrate de haber hecho `git push origin nombre-de-tu-rama` |
+- **911** — Emergencias general
+- **171** — Protección Civil
+- **0800-BOMBEROS** — Bomberos
+- **0800-CRUZROJA** — Cruz Roja Venezolana
 
 ---
 
-### 💬 ¿Dudas?
-
-Pregunta sin miedo. Todos empezamos sin saber. Este proyecto es para aprender.
+<footer align="center">
+    Diego Santos · Product Engineer
+</footer>
