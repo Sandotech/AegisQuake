@@ -181,5 +181,5 @@ class Cuestionario {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    new Cuestionario();
+    window.__cuestionarioInstancia = new Cuestionario();
 });

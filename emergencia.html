@@ -1,19 +1,707 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>En Caso de Emergencia</title>
+    <meta name="theme-color" content="#1B4EF5">
+    <meta name="description" content="Centro de emergencia personal: guías de actuación, mochila 72, primeros auxilios y contactos de emergencia.">
+    <title>Centro de Emergencia | Exposucre</title>
     <link rel="icon" type="image/svg+xml" href="assets/images/logo-placeholder.svg">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/emergencia.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <main>
-        <h1>PÁGINA DE DIRECTRICES DE EMERGENCIA</h1>
+
+    <header class="encabezado" id="encabezado">
+        <div class="encabezado__interior">
+            <a href="index.html" class="encabezado__marca" aria-label="Volver al inicio">
+                <span class="marca__logo" aria-hidden="true">
+                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#E53935"/>
+                                <stop offset="1" stop-color="#1B4EF5"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="36" height="36" rx="10" fill="url(#logoGrad)"/>
+                        <path d="M18 9L9 25H27L18 9Z" fill="white" fill-opacity="0.95"/>
+                        <circle cx="18" cy="22" r="2" fill="white"/>
+                    </svg>
+                </span>
+                <span class="marca__texto">
+                    <span class="marca__titulo">Centro de Emergencia</span>
+                    <span class="marca__subtitulo">Tu guía personal</span>
+                </span>
+            </a>
+
+            <div class="encabezado__acciones">
+                <button class="icono-boton" id="botonTema" aria-label="Cambiar tema" title="Cambiar tema">
+                    <svg class="icono-sol" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="icono-luna" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+                <a href="index.html" class="icono-boton encabezado__volver" aria-label="Volver al inicio" title="Volver al inicio">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <nav class="navegacion-rapida" aria-label="Navegación rápida">
+            <a href="#guias" class="nav-rapida__enlace">Guías</a>
+            <a href="#mochila" class="nav-rapida__enlace">Mochila</a>
+            <a href="#auxilios" class="nav-rapida__enlace">Auxilios</a>
+            <a href="#contactos" class="nav-rapida__enlace">Contactos</a>
+        </nav>
+    </header>
+
+    <main class="emergencia">
+
+        <section class="hero" aria-label="Tu estado de preparación">
+            <div class="hero__contenido">
+                <div class="hero__saludo">
+                    <span class="hero__etiqueta">Tu centro personal</span>
+                    <h1 class="hero__titulo">¿Listo para actuar?</h1>
+                    <p class="hero__subtitulo">Revisa tu nivel de preparación y ten a mano todo lo necesario.</p>
+                </div>
+
+                <div class="hero__estado" id="estadoPreparacion">
+                    <div class="estado__circulo">
+                        <svg class="estado__anillo" width="140" height="140" viewBox="0 0 140 140">
+                            <circle cx="70" cy="70" r="60" fill="none" stroke="var(--color-borde)" stroke-width="12"/>
+                            <circle id="anilloProgreso" cx="70" cy="70" r="60" fill="none" stroke="var(--color-exito)" stroke-width="12" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377" transform="rotate(-90 70 70)"/>
+                        </svg>
+                        <div class="estado__numero">
+                            <span id="porcentajeNumero">0</span><span class="estado__simbolo">%</span>
+                        </div>
+                    </div>
+                    <div class="estado__info">
+                        <span class="estado__etiqueta">Nivel de preparación</span>
+                        <span class="estado__nivel" id="nivelTexto">Empezando</span>
+                        <span class="estado__detalle" id="detalleTexto">0 de 14 elementos listos</span>
+                    </div>
+                </div>
+
+                <div class="hero__acciones">
+                    <a href="tel:911" class="accion-rapida accion-rapida--critico">
+                        <span class="accion-rapida__icono">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </span>
+                        <span class="accion-rapida__texto">
+                            <strong>Llamar al 911</strong>
+                            <small>Emergencias</small>
+                        </span>
+                    </a>
+                    <button class="accion-rapida accion-rapida--secundario" id="botonLinterna" title="Linterna">
+                        <span class="accion-rapida__icono">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6c0-1.1-.9-2-2-2H8C6.9 4 6 4.9 6 6v3c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V6z"/><path d="M7 10v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9"/><path d="M9 16h6"/></svg>
+                        </span>
+                        <span class="accion-rapida__texto">
+                            <strong>Linterna</strong>
+                            <small>Iluminar pantalla</small>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="guias" id="guias" aria-label="Guías por tipo de emergencia">
+            <div class="seccion__encabezado">
+                <h2 class="seccion__titulo">Guías de actuación</h2>
+                <p class="seccion__subtitulo">Selecciona el tipo de emergencia y sigue los pasos.</p>
+            </div>
+
+            <div class="guias__selector" role="tablist" aria-label="Tipo de emergencia">
+                <button class="selector-tarjeta activa" role="tab" aria-selected="true" aria-controls="panel-sismo" data-tab="sismo">
+                    <span class="selector-tarjeta__icono">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20L6 4L10 14L14 6L18 12L22 2"/></svg>
+                    </span>
+                    <span class="selector-tarjeta__texto">
+                        <strong>Sismo</strong>
+                        <small>Terremoto</small>
+                    </span>
+                </button>
+                <button class="selector-tarjeta" role="tab" aria-selected="false" aria-controls="panel-inundacion" data-tab="inundacion">
+                    <span class="selector-tarjeta__icono">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c1.5 0 3 1 4.5 1S9 6 10.5 6s3 1 4.5 1S18 6 19.5 6 22 7 22 7"/><path d="M2 12c1.5 0 3 1 4.5 1s3-1 4.5-1 3 1 4.5 1 3-1 4.5-1 2.5 1 2.5 1"/><path d="M2 18c1.5 0 3 1 4.5 1s3-1 4.5-1 3 1 4.5 1 3-1 4.5-1 2.5 1 2.5 1"/></svg>
+                    </span>
+                    <span class="selector-tarjeta__texto">
+                        <strong>Inundación</strong>
+                        <small>Lluvias</small>
+                    </span>
+                </button>
+                <button class="selector-tarjeta" role="tab" aria-selected="false" aria-controls="panel-incendio" data-tab="incendio">
+                    <span class="selector-tarjeta__icono">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                    </span>
+                    <span class="selector-tarjeta__texto">
+                        <strong>Incendio</strong>
+                        <small>Fuego</small>
+                    </span>
+                </button>
+            </div>
+
+            <div class="guias__paneles">
+
+                <div class="guias__panel activo" id="panel-sismo" role="tabpanel" aria-labelledby="tab-sismo" data-panel="sismo">
+                    <article class="guia guia--sismo">
+                        <header class="guia__hero">
+                            <div class="guia__hero-texto">
+                                <span class="guia__categoria">Emergencia sísmica</span>
+                                <h3 class="guia__titulo">Sismo</h3>
+                                <p class="guia__descripcion">Mantén la calma. La mayoría de lesionados se producen al caer objetos o al intentar salir corriendo.</p>
+                            </div>
+                            <div class="guia__hero-decoracion" aria-hidden="true">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"><path d="M2 20L6 4L10 14L14 6L18 12L22 2"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="guia__fases">
+                            <section class="fase fase--critico">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">1</span>
+                                    Durante el sismo
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li><strong>Agáchate</strong> — Sobre manos y rodillas para no caer.</li>
+                                    <li><strong>Cúbrete</strong> — Bajo una mesa resistente, protegiendo cabeza y cuello.</li>
+                                    <li><strong>Sujétate</strong> — A la pata del mueble hasta que termine el movimiento.</li>
+                                    <li>Aléjate de ventanas, espejos y objetos que puedan caer.</li>
+                                    <li>No uses ascensor ni salgas corriendo.</li>
+                                </ol>
+                            </section>
+
+                            <section class="fase fase--advertencia">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">2</span>
+                                    Después del sismo
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li><strong>Revisa fugas de gas</strong> — Si hueles, abre puertas y ventanas, no enciendas interruptores.</li>
+                                    <li><strong>Corta la electricidad</strong> — Si ves cables o daños, baja el interruptor principal.</li>
+                                    <li>Usa linterna, no fósforos ni velas.</li>
+                                    <li>Dirígete al <strong>punto de encuentro</strong> familiar.</li>
+                                    <li>Prepárate para réplicas.</li>
+                                </ol>
+                            </section>
+
+                            <section class="fase fase--exito">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">3</span>
+                                    Prevención
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li>Fija muebles pesados a la pared.</li>
+                                    <li>Identifica zonas seguras en cada habitación.</li>
+                                    <li>Ten lista tu mochila 72.</li>
+                                    <li>Define un punto de encuentro familiar.</li>
+                                    <li>Practica simulacros cada 3 meses.</li>
+                                </ol>
+                            </section>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="guias__panel" id="panel-inundacion" role="tabpanel" aria-labelledby="tab-inundacion" data-panel="inundacion">
+                    <article class="guia guia--inundacion">
+                        <header class="guia__hero">
+                            <div class="guia__hero-texto">
+                                <span class="guia__categoria">Emergencia por lluvias</span>
+                                <h3 class="guia__titulo">Inundación</h3>
+                                <p class="guia__descripcion">15 cm de agua pueden derribar a una persona. 30 cm arrastran un vehículo. La prevención salva vidas.</p>
+                            </div>
+                            <div class="guia__hero-decoracion" aria-hidden="true">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"><path d="M2 6c1.5 0 3 1 4.5 1S9 6 10.5 6s3 1 4.5 1S18 6 19.5 6 22 7 22 7"/><path d="M2 12c1.5 0 3 1 4.5 1s3-1 4.5-1 3 1 4.5 1 3-1 4.5-1 2.5 1 2.5 1"/><path d="M2 18c1.5 0 3 1 4.5 1s3-1 4.5-1 3 1 4.5 1 3-1 4.5-1 2.5 1 2.5 1"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="guia__fases">
+                            <section class="fase fase--critico">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">1</span>
+                                    Durante la inundación
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li><strong>Sube a zonas altas</strong> — Piso más alto o techo seguro.</li>
+                                    <li><strong>No cruces agua corriente</strong> — Ni caminando ni en vehículo.</li>
+                                    <li>Desconecta la electricidad si hay agua cerca.</li>
+                                    <li>Cierra puertas y ventanas para contener el agua.</li>
+                                    <li>No nades en agua de inundación (contaminada).</li>
+                                </ol>
+                            </section>
+
+                            <section class="fase fase--advertencia">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">2</span>
+                                    Después de la inundación
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li>Espera a que las autoridades confirmen que puedes volver.</li>
+                                    <li>Revisa daños estructurales antes de entrar.</li>
+                                    <li>No bebas agua de la llave, podría estar contaminada.</li>
+                                    <li>Limpia con botas y guantes. Desinfecta todo.</li>
+                                </ol>
+                            </section>
+
+                            <section class="fase fase--exito">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">3</span>
+                                    Prevención
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li>Limpia desagües y canaletas antes de las lluvias.</li>
+                                    <li>Monitorea quebradas si vives cerca.</li>
+                                    <li>Identifica rutas hacia zonas altas en tu comunidad.</li>
+                                    <li>Guarda documentos en bolsas impermeables.</li>
+                                </ol>
+                            </section>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="guias__panel" id="panel-incendio" role="tabpanel" aria-labelledby="tab-incendio" data-panel="incendio">
+                    <article class="guia guia--incendio">
+                        <header class="guia__hero">
+                            <div class="guia__hero-texto">
+                                <span class="guia__categoria">Emergencia por fuego</span>
+                                <h3 class="guia__titulo">Incendio</h3>
+                                <p class="guia__descripcion">El humo sube. Evacúa agachado, cubre nariz y boca. No uses ascensor bajo ninguna circunstancia.</p>
+                            </div>
+                            <div class="guia__hero-decoracion" aria-hidden="true">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                            </div>
+                        </header>
+
+                        <div class="guia__fases">
+                            <section class="fase fase--critico">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">1</span>
+                                    Durante el incendio
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li>Corta el gas y la electricidad si es seguro.</li>
+                                    <li>Usa el extintor solo si el fuego es pequeño. <strong>P.A.S.</strong>: <em>P</em>resiona, <em>A</em>punta a la base, <em>S</em>ostén.</li>
+                                    <li><strong>Evacúa agachado</strong> — Cubre nariz y boca con un paño húmedo.</li>
+                                    <li>No uses ascensor. Toca las puertas con el dorso de la mano.</li>
+                                    <li>Si tu ropa se incendia: <strong>Detén, Cae, Rueda</strong>.</li>
+                                </ol>
+                            </section>
+
+                            <section class="fase fase--advertencia">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">2</span>
+                                    Después del incendio
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li>No reingreses al edificio hasta que sea seguro.</li>
+                                    <li>Dirígete al punto de encuentro familiar.</li>
+                                    <li>Revisa estructuras (techos, paredes, pisos).</li>
+                                    <li>No uses agua en incendios eléctricos.</li>
+                                </ol>
+                            </section>
+
+                            <section class="fase fase--exito">
+                                <h4 class="fase__titulo">
+                                    <span class="fase__numero">3</span>
+                                    Prevención
+                                </h4>
+                                <ol class="fase__pasos">
+                                    <li>Instala detectores de humo en cada piso.</li>
+                                    <li>Ten un extintor en la cocina y aprende a usarlo.</li>
+                                    <li>Revisa el cableado eléctrico periódicamente.</li>
+                                    <li>Dibuja un mapa con dos salidas por habitación.</li>
+                                    <li>No dejes velas o cocina encendida sin supervisión.</li>
+                                </ol>
+                            </section>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mochila" id="mochila" aria-label="Mochila de 72 horas">
+            <div class="seccion__encabezado">
+                <h2 class="seccion__titulo">Mochila 72</h2>
+                <p class="seccion__subtitulo">Todo lo esencial para sobrevivir 72 horas después de una emergencia. Marca lo que ya tienes.</p>
+            </div>
+
+            <div class="mochila__tarjeta">
+                <div class="mochila__progreso">
+                    <div class="mochila__progreso-info">
+                        <span class="mochila__progreso-numero">
+                            <strong id="hechosNumero">0</strong><span class="mochila__progreso-de">/14</span>
+                        </span>
+                        <span class="mochila__progreso-etiqueta" id="estadoMochila">Empezando</span>
+                    </div>
+                    <div class="mochila__barra">
+                        <div class="mochila__barra-relleno" id="rellenoMochila"></div>
+                    </div>
+                </div>
+
+                <div class="mochila__categorias">
+                    <div class="categoria">
+                        <h3 class="categoria__titulo">
+                            <span class="categoria__icono">AGUA</span>
+                            Agua y alimentos
+                        </h3>
+                        <ul class="categoria__items">
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Agua potable</strong>
+                                        <small>4 litros por persona mínimo</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Alimentos no perecederos</strong>
+                                        <small>Enlatados, barras, frutos secos</small>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="categoria">
+                        <h3 class="categoria__titulo">
+                            <span class="categoria__icono">LUZ</span>
+                            Luz y comunicación
+                        </h3>
+                        <ul class="categoria__items">
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Linterna + pilas extra</strong>
+                                        <small>Preferible a dínamo</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Radio portátil</strong>
+                                        <small>Información oficial</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Cargador portátil</strong>
+                                        <small>Power bank cargado</small>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="categoria">
+                        <h3 class="categoria__titulo">
+                            <span class="categoria__icono">SALUD</span>
+                            Salud y seguridad
+                        </h3>
+                        <ul class="categoria__items">
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Botiquín de primeros auxilios</strong>
+                                        <small>Vendas, gasa, alcohol, tijeras</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Silbato</strong>
+                                        <small>Para señalizar ubicación</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Mascarillas</strong>
+                                        <small>Polvo, humo, escombros</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Higiene personal</strong>
+                                        <small>Toallas, gel antibacterial</small>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="categoria">
+                        <h3 class="categoria__titulo">
+                            <span class="categoria__icono">KIT</span>
+                            Herramientas y documentos
+                        </h3>
+                        <ul class="categoria__items">
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Documentos importantes</strong>
+                                        <small>Copias en bolsa impermeable</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Dinero en efectivo</strong>
+                                        <small>Billetes pequeños</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Manta térmica o abrigo</strong>
+                                        <small>Ropa de abrigo e impermeable</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Multiherramienta</strong>
+                                        <small>Navaja, abrelatas, tijeras</small>
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="check-item">
+                                <label>
+                                    <input type="checkbox" class="check-item__input">
+                                    <span class="check-item__marca"></span>
+                                    <span class="check-item__contenido">
+                                        <strong>Bolsas de basura</strong>
+                                        <small>Impermeables, aislante</small>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="auxilios" id="auxilios" aria-label="Primeros auxilios básicos">
+            <div class="seccion__encabezado">
+                <h2 class="seccion__titulo">Primeros auxilios</h2>
+                <p class="seccion__subtitulo">Procedimientos básicos mientras llega la ayuda profesional.</p>
+            </div>
+
+            <div class="auxilios__grid">
+                <details class="aux-card">
+                    <summary class="aux-card__resumen">
+                        <span class="aux-card__icono aux-card__icono--rcp">RCP</span>
+                        <span class="aux-card__titulo">Resucitación cardiopulmonar</span>
+                        <span class="aux-card__tiempo aux-card__tiempo--critico">Crítico</span>
+                    </summary>
+                    <div class="aux-card__contenido">
+                        <ol class="aux-card__pasos">
+                            <li>Verifica que esté inconsciente y no respire.</li>
+                            <li>Llama a emergencias o pide a alguien que lo haga.</li>
+                            <li>Talón de la mano en el centro del pecho.</li>
+                            <li>Otra mano encima, dedos entrelazados.</li>
+                            <li><strong>100-120 compresiones por minuto</strong>, hundiendo 5 cm.</li>
+                            <li>Continúa hasta que llegue ayuda o respire.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                <details class="aux-card">
+                    <summary class="aux-card__resumen">
+                        <span class="aux-card__icono aux-card__icono--sang">SANG</span>
+                        <span class="aux-card__titulo">Hemorragia (sangrado)</span>
+                        <span class="aux-card__tiempo aux-card__tiempo--urgente">Urgente</span>
+                    </summary>
+                    <div class="aux-card__contenido">
+                        <ol class="aux-card__pasos">
+                            <li><strong>Presión directa</strong> con gasa o paño limpio.</li>
+                            <li>Eleva el área herida por encima del corazón.</li>
+                            <li>No retires el paño si se empapa — coloca otro encima.</li>
+                            <li><strong>Torniquete</strong> solo en extremo riesgo de desangre. Anota la hora.</li>
+                            <li>Busca atención médica inmediata.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                <details class="aux-card">
+                    <summary class="aux-card__resumen">
+                        <span class="aux-card__icono aux-card__icono--quem">QUEM</span>
+                        <span class="aux-card__titulo">Quemaduras</span>
+                        <span class="aux-card__tiempo aux-card__tiempo--urgente">Urgente</span>
+                    </summary>
+                    <div class="aux-card__contenido">
+                        <ol class="aux-card__pasos">
+                            <li>Enfría con <strong>agua fría</strong> (no hielo directo) por 10 min.</li>
+                            <li>No apliques hielo directo — daña el tejido.</li>
+                            <li>No uses cremas, mantequilla ni pasta de dientes.</li>
+                            <li>Cubre con paño limpio y húmedo o gasa estéril.</li>
+                            <li>No revientes ampollas. Atención médica si es grave.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                <details class="aux-card">
+                    <summary class="aux-card__resumen">
+                        <span class="aux-card__icono aux-card__icono--frac">FRAC</span>
+                        <span class="aux-card__titulo">Fracturas y lesiones</span>
+                        <span class="aux-card__tiempo aux-card__tiempo--estable">Estable</span>
+                    </summary>
+                    <div class="aux-card__contenido">
+                        <ol class="aux-card__pasos">
+                            <li>No muevas si sospechas lesión en columna o cuello.</li>
+                            <li>Inmoviliza con tablas, revistas o ropa enrollada.</li>
+                            <li>No intentes enderezar huesos ni reducir dislocaciones.</li>
+                            <li>Aplica hielo envuelto en paño (reduce inflamación).</li>
+                            <li>Traslada solo si es seguro.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                <details class="aux-card">
+                    <summary class="aux-card__resumen">
+                        <span class="aux-card__icono aux-card__icono--heim">HEIM</span>
+                        <span class="aux-card__titulo">Atragantamiento (Heimlich)</span>
+                        <span class="aux-card__tiempo aux-card__tiempo--critico">Crítico</span>
+                    </summary>
+                    <div class="aux-card__contenido">
+                        <ol class="aux-card__pasos">
+                            <li>Si no puede hablar ni toser, actúa de inmediato.</li>
+                            <li>Detrás de la persona, rodea su cintura con los brazos.</li>
+                            <li>Puño cerrado arriba del ombligo, bajo las costillas.</li>
+                            <li>Presiona hacia adentro y arriba con fuerza.</li>
+                            <li>Repite hasta que expulse o pierda el conocimiento.</li>
+                            <li>Si se desmaya: inicia RCP y llama a emergencias.</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section class="contactos" id="contactos" aria-label="Contactos de emergencia">
+            <div class="seccion__encabezado">
+                <h2 class="seccion__titulo">Contactos de emergencia</h2>
+                <p class="seccion__subtitulo">Guarda estos números y agrega los tuyos. Un clic para llamar.</p>
+            </div>
+
+            <div class="contactos__principales">
+                <a href="tel:911" class="contacto-card contacto-card--destacado">
+                    <span class="contacto-card__numero">911</span>
+                    <span class="contacto-card__info">
+                        <strong>Emergencias</strong>
+                        <small>Línea general del país</small>
+                    </span>
+                    <span class="contacto-card__icono" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </span>
+                </a>
+
+                <a href="tel:171" class="contacto-card">
+                    <span class="contacto-card__numero">171</span>
+                    <span class="contacto-card__info">
+                        <strong>Protección Civil</strong>
+                        <small>Desastres y rescates</small>
+                    </span>
+                </a>
+
+                <a href="tel:0800" class="contacto-card">
+                    <span class="contacto-card__numero">0800</span>
+                    <span class="contacto-card__info">
+                        <strong>Bomberos</strong>
+                        <small>Incendios y emergencias</small>
+                    </span>
+                </a>
+
+                <a href="tel:0800" class="contacto-card">
+                    <span class="contacto-card__numero">0800</span>
+                    <span class="contacto-card__info">
+                        <strong>Cruz Roja</strong>
+                        <small>Ambulancias y auxilios</small>
+                    </span>
+                </a>
+            </div>
+
+            <div class="contactos__personales">
+                <h3 class="contactos__subtitulo-seccion">Tus contactos personales</h3>
+                <p class="contactos__sub">Se guardan automáticamente en tu navegador.</p>
+
+                <div class="contactos__lista">
+                    <div class="contacto-input">
+                        <input type="text" class="contacto-input__campo" placeholder="Nombre (ej: Mamá)" id="contacto1-nombre" autocomplete="off">
+                        <input type="tel" class="contacto-input__campo contacto-input__campo--tel" placeholder="0412-1234567" id="contacto1-telf" autocomplete="off">
+                        <a href="#" class="contacto-input__llamar" data-telf-id="contacto1-telf" aria-label="Llamar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </a>
+                    </div>
+                    <div class="contacto-input">
+                        <input type="text" class="contacto-input__campo" placeholder="Nombre (ej: Papá)" id="contacto2-nombre" autocomplete="off">
+                        <input type="tel" class="contacto-input__campo contacto-input__campo--tel" placeholder="0412-1234567" id="contacto2-telf" autocomplete="off">
+                        <a href="#" class="contacto-input__llamar" data-telf-id="contacto2-telf" aria-label="Llamar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </a>
+                    </div>
+                    <div class="contacto-input">
+                        <input type="text" class="contacto-input__campo" placeholder="Nombre (ej: Vecino)" id="contacto3-nombre" autocomplete="off">
+                        <input type="tel" class="contacto-input__campo contacto-input__campo--tel" placeholder="0412-1234567" id="contacto3-telf" autocomplete="off">
+                        <a href="#" class="contacto-input__llamar" data-telf-id="contacto3-telf" aria-label="Llamar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="emergencia__footer">
+            <p class="emergencia__disclaimer">Esta guía es orientativa. En caso de emergencia real, contacta siempre a las autoridades oficiales.</p>
+            <a href="index.html" class="boton boton-principal">Volver al inicio</a>
+        </footer>
+
     </main>
+
+    <a href="tel:911" class="fab" aria-label="Llamar al 911" title="Llamar al 911">
+        <span class="fab__punto" aria-hidden="true"></span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span class="fab__texto">911</span>
+    </a>
+
+    <script src="js/emergencia.js"></script>
 </body>
 </html>
