@@ -653,7 +653,7 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
 
 .resultados-consejos {
     margin: 0 var(--espacio-xl) var(--espacio-xl);
-    padding: var(--espacio-lg);
+    padding: 12px 24px !important;
     background: var(--color-fondo);
     border-radius: var(--radio-lg);
 }
