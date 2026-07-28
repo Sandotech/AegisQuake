@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useCuestionario } from "@/composables/useCuestionario";
 import { useResultados } from "@/composables/useResultados";
@@ -9,24 +9,25 @@ import OpcionCuestionario from "@/components/OpcionCuestionario.vue";
 import SemaforoResultado from "@/components/SemaforoResultado.vue";
 
 const router = useRouter();
-const cuestionario = useCuestionario();
+const c = useCuestionario();
 
-const porcentajeRef = computed(() => cuestionario.porcentajeFinal.value);
+const mostrarResultados = computed(() => c.mostrarResultados.value);
+const pasoActual = computed(() => c.pasoActual.value);
+const totalPasos = c.totalPasos;
+const preguntaActual = computed(() => c.preguntaActual.value);
+const respuestas = computed(() => c.respuestas.value);
+const porcentajeProgreso = computed(() => c.porcentajeProgreso.value);
+const textoProgreso = computed(() => c.textoProgreso.value);
+const porcentajeFinal = computed(() => c.porcentajeFinal.value);
+
+const porcentajeRef = computed(() => c.porcentajeFinal.value);
 const { nivel, claseCss } = useResultados(porcentajeRef);
 
-const pasoActualLocal = ref(cuestionario.pasoActual.value);
-watch(
-    () => cuestionario.pasoActual.value,
-    (nuevo) => {
-        pasoActualLocal.value = nuevo;
-    }
-);
-
 function getEstadoOpcion(preguntaIdx, opcionIdx) {
-    const respuesta = cuestionario.respuestas.value[preguntaIdx];
+    const respuesta = respuestas.value[preguntaIdx];
     if (respuesta === null || respuesta === undefined) return "normal";
 
-    const pregunta = getPreguntaPorIdx(preguntaIdx);
+    const pregunta = c.preguntas[preguntaIdx];
     if (!pregunta) return "seleccionada";
 
     const opcionElegida = pregunta.opciones[respuesta];
@@ -42,10 +43,24 @@ function getEstadoOpcion(preguntaIdx, opcionIdx) {
     return "desactivada";
 }
 
-function getPreguntaPorIdx(idx) {
-    return cuestionario.preguntas
-        ? cuestionario.preguntas[idx]
-        : null;
+function seleccionarOpcion(preguntaIdx, opcionIdx) {
+    c.seleccionar(preguntaIdx, opcionIdx);
+}
+
+function iniciar() {
+    c.iniciar();
+}
+
+function avanzar() {
+    c.avanzar();
+}
+
+function retroceder() {
+    c.retroceder();
+}
+
+function reiniciar() {
+    c.reiniciar();
 }
 
 const iconoReloj = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
@@ -79,31 +94,28 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
             </template>
         </HeroCard>
 
-        <section
-            v-if="!cuestionario.mostrarResultados.value"
-            class="cuestionario-seccion"
-        >
+        <section v-if="!mostrarResultados" class="cuestionario-seccion">
             <div class="cuestionario-tarjeta">
                 <div class="cuestionario-encabezado">
                     <div
                         class="progreso-barra"
                         role="progressbar"
-                        :aria-valuenow="cuestionario.porcentajeProgreso.value"
+                        :aria-valuenow="porcentajeProgreso"
                         aria-valuemin="0"
                         aria-valuemax="100"
                     >
                         <div
                             class="progreso-relleno"
-                            :style="{ width: cuestionario.porcentajeProgreso.value + '%' }"
+                            :style="{ width: porcentajeProgreso + '%' }"
                         ></div>
                     </div>
                     <div class="progreso-info">
-                        {{ cuestionario.textoProgreso.value }}
+                        {{ textoProgreso }}
                     </div>
                 </div>
 
                 <div class="cuestionario-viewport">
-                    <div v-if="pasoActualLocal === 0" class="diapositiva activa" key="inicio">
+                    <div v-if="pasoActual === 0" class="diapositiva activa" key="inicio">
                         <span class="diapositiva__categoria">Comencemos</span>
                         <h2 class="diapositiva__titulo">Diagnóstico de Emergencias</h2>
                         <p class="diapositiva__descripcion">
@@ -111,7 +123,7 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             4 preguntas rápidas.
                         </p>
                         <div class="cuestionario-acciones cuestionario-acciones--inicio">
-                            <button class="boton boton-principal" @click="cuestionario.iniciar()">
+                            <button class="boton boton-principal" @click="iniciar">
                                 Comenzar Diagnóstico
                                 <svg
                                     width="18"
@@ -134,72 +146,70 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                     </div>
 
                     <div
-                        v-else-if="cuestionario.preguntaActual.value"
+                        v-else-if="preguntaActual"
                         class="diapositiva activa"
-                        :key="cuestionario.preguntaActual.value.id"
+                        :key="preguntaActual.id"
                     >
                         <span class="diapositiva__categoria">
-                            {{ cuestionario.preguntaActual.value.categoria }}
+                            {{ preguntaActual.categoria }}
                         </span>
                         <h2 class="diapositiva__titulo">
-                            {{ cuestionario.preguntaActual.value.pregunta }}
+                            {{ preguntaActual.pregunta }}
                         </h2>
 
                         <div class="opciones">
                             <OpcionCuestionario
-                                v-for="(opcion, i) in cuestionario.preguntaActual.value.opciones"
+                                v-for="(opcion, i) in preguntaActual.opciones"
                                 :key="i"
                                 :texto="opcion.texto"
                                 :es-correcta="opcion.correcta"
-                                :estado="getEstadoOpcion(pasoActualLocal - 1, i)"
-                                :desactivada="cuestionario.respuestas.value[pasoActualLocal - 1] !== null"
-                                @seleccionar="cuestionario.seleccionar(pasoActualLocal - 1, i)"
+                                :estado="getEstadoOpcion(pasoActual - 1, i)"
+                                :desactivada="respuestas[pasoActual - 1] !== null"
+                                @seleccionar="seleccionarOpcion(pasoActual - 1, i)"
                             />
                         </div>
 
                         <div
-                            v-if="cuestionario.respuestas.value[pasoActualLocal - 1] !== null"
+                            v-if="respuestas[pasoActual - 1] !== null"
                             class="explicacion-contenedor"
                         >
                             <div
                                 class="explicacion"
                                 :class="{
-                                    'explicacion--correcta':
-                                        cuestionario.preguntaActual.value.opciones[
-                                            cuestionario.respuestas.value[pasoActualLocal - 1]
-                                        ].correcta,
-                                    'explicacion--incorrecta':
-                                        !cuestionario.preguntaActual.value.opciones[
-                                            cuestionario.respuestas.value[pasoActualLocal - 1]
-                                        ].correcta,
+                                    'explicacion--correcta': preguntaActual.opciones[
+                                        respuestas[pasoActual - 1]
+                                    ].correcta,
+                                    'explicacion--incorrecta': !preguntaActual.opciones[
+                                        respuestas[pasoActual - 1]
+                                    ].correcta,
                                 }"
                             >
                                 <div class="explicacion__etiqueta">
                                     {{
-                                        cuestionario.preguntaActual.value.opciones[
-                                            cuestionario.respuestas.value[pasoActualLocal - 1]
+                                        preguntaActual.opciones[
+                                            respuestas[pasoActual - 1]
                                         ].correcta
                                             ? "¡Correcto!"
                                             : "Incorrecto"
                                     }}
                                 </div>
-                                {{ cuestionario.preguntaActual.value.explicacion }}
+                                {{ preguntaActual.explicacion }}
                             </div>
                         </div>
 
                         <div class="cuestionario-acciones">
                             <button
                                 class="boton boton-atras"
-                                @click="cuestionario.retroceder()"
+                                @click="retroceder"
                             >
                                 ← Atrás
                             </button>
                             <button
                                 class="boton boton-principal"
-                                :disabled="cuestionario.respuestas.value[pasoActualLocal - 1] === null"
-                                @click="cuestionario.avanzar()"
+                                :disabled="respuestas[pasoActual - 1] === null"
+                                @click="avanzar"
                             >
-                                {{ pasoActualLocal === cuestionario.totalPasos
+                                {{ pasoActual === totalPasos
                                     ? "Ver resultados"
                                     : "Siguiente" }}
                                 <svg
@@ -225,10 +235,10 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
         <section v-else class="resultados-seccion">
             <div class="resultados-tarjeta" :class="claseCss" id="tarjetaResultados">
                 <div class="resultados-superior">
-                    <SemaforoResultado :nivel="nivel.value.nivel" />
+                    <SemaforoResultado :nivel="nivel.nivel" />
                     <div class="resultados-numero">
                         <span class="resultados-porcentaje">
-                            {{ cuestionario.porcentajeFinal.value }}%
+                            {{ porcentajeFinal }}%
                         </span>
                         <span class="resultados-etiqueta">Tu Índice de Preparación</span>
                     </div>
@@ -236,8 +246,8 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
 
                 <div class="resultados-cuerpo">
                     <div class="resultados-divisor"></div>
-                    <h3 class="resultados-categoria">{{ nivel.value.etiqueta }}</h3>
-                    <p class="resultados-mensaje">{{ nivel.value.mensaje }}</p>
+                    <h3 class="resultados-categoria">{{ nivel.etiqueta }}</h3>
+                    <p class="resultados-mensaje">{{ nivel.mensaje }}</p>
                 </div>
 
                 <div class="resultados-consejos">
@@ -259,7 +269,7 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                         Recomendaciones
                     </h4>
                     <ul class="resultados-lista-consejos">
-                        <li v-for="(consejo, idx) in nivel.value.consejos" :key="idx">
+                        <li v-for="(consejo, idx) in nivel.consejos" :key="idx">
                             {{ consejo }}
                         </li>
                     </ul>
@@ -283,7 +293,7 @@ const iconoEscudo = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                         </svg>
                         Centro de Emergencia
                     </router-link>
-                    <button class="boton boton-secundario" @click="cuestionario.reiniciar()">
+                    <button class="boton boton-secundario" @click="reiniciar">
                         <svg
                             width="18"
                             height="18"

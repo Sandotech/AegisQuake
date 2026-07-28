@@ -57,13 +57,8 @@ export function useCuestionario(preguntas = bancoPreguntas) {
     }
 
     function seleccionar(preguntaIdx, opcionIdx) {
-        const pregunta = preguntas[preguntaIdx];
-        if (!pregunta) return;
-        const yaRespondida =
-            respuestas.value[preguntaIdx] !== null &&
-            (pregunta.opciones[respuestas.value[preguntaIdx]].correcta ||
-                pregunta.opciones[respuestas.value[preguntaIdx]].correcta === false);
-        if (yaRespondida) return;
+        if (respuestas.value[preguntaIdx] !== null) return;
+        if (!preguntas[preguntaIdx]) return;
 
         const nuevasRespuestas = [...respuestas.value];
         nuevasRespuestas[preguntaIdx] = opcionIdx;

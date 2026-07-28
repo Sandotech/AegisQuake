@@ -1,45 +1,55 @@
 import { ref, watch } from "vue";
 
 const TEMA_KEY = "expomierda_tema";
-const tema = ref("light");
 
-function cargarTemaInicial() {
+function obtenerTemaInicial() {
     try {
         const guardado = localStorage.getItem(TEMA_KEY);
         if (guardado === "dark" || guardado === "light") {
-            tema.value = guardado;
-        } else {
-            const prefiereOscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            tema.value = prefiereOscuro ? "dark" : "light";
+            return guardado;
+        }
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            return "dark";
         }
     } catch (e) {
-        tema.value = "light";
+        // localStorage no disponible
+    }
+    return "light";
+}
+
+const tema = ref(obtenerTemaInicial());
+
+function aplicarTema(valor) {
+    if (typeof document !== "undefined") {
+        document.documentElement.setAttribute("data-theme", valor);
     }
 }
 
-function aplicarTema(valor) {
-    document.documentElement.setAttribute("data-theme", valor);
-}
+aplicarTema(tema.value);
+
+watch(tema, (nuevo) => {
+    aplicarTema(nuevo);
+    try {
+        localStorage.setItem(TEMA_KEY, nuevo);
+    } catch (e) {
+        // localStorage no disponible
+    }
+});
 
 export function useTema() {
-    cargarTemaInicial();
-    aplicarTema(tema.value);
-
-    watch(tema, (nuevo) => {
-        aplicarTema(nuevo);
-        try {
-            localStorage.setItem(TEMA_KEY, nuevo);
-        } catch (e) {
-            // localStorage no disponible
-        }
-    });
-
     function alternar() {
         tema.value = tema.value === "dark" ? "light" : "dark";
+    }
+
+    function establecer(valor) {
+        if (valor === "dark" || valor === "light") {
+            tema.value = valor;
+        }
     }
 
     return {
         tema,
         alternar,
+        establecer,
     };
 }
