@@ -41,8 +41,8 @@ git --version
 
 ```bash
 # 1. Clonar el repositorio
-git clone <URL-del-repositorio>
-cd expomierda
+git clone https://github.com/Sandotech/AegisQuake
+cd AegisQuake
 
 # 2. Instalar dependencias
 npm install
