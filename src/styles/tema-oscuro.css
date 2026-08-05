@@ -14,6 +14,10 @@
     --color-advertencia-claro: rgba(253, 216, 53, 0.1);
     --color-exito-claro: rgba(67, 160, 71, 0.12);
 
+    /* Títulos: fondo negro en dark, texto blanco */
+    --title-bg: #000000;
+    --title-color: #ffffff;
+
     --sombra-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --sombra-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
