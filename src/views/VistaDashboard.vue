@@ -385,7 +385,6 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
     font-size: 0.85rem;
     font-weight: 500;
     opacity: 0.9;
-    text-transform: capitalize;
 }
 
 .semaforo--normal {

@@ -197,15 +197,46 @@ const nivelGlobal = computed(() => {
     return "normal";
 });
 
+// Mensajes detallados para el texto pequeño del semáforo.
+const MENSAJES = {
+    temperatura: {
+        advertencia: "Temperatura por encima de los niveles aceptables",
+        critico: "Temperatura muy alta",
+    },
+    humedad: {
+        advertencia: "Humedad elevada, vigila señales de lluvia",
+        critico: "Humedad crítica, alto riesgo de inundación",
+    },
+    gas: {
+        advertencia: "Gas por encima del nivel normal",
+        critico: "Nivel de gas peligroso, riesgo de incendio",
+    },
+    vibracion: {
+        advertencia: "Movimiento leve detectado, posible sismo en curso",
+        critico: "Movimiento fuerte, terremoto en curso",
+    },
+    llama: {
+        critico: "Llama detectada, incendio en curso",
+    },
+};
+
 const motivoAlerta = computed(() => {
-    const motivos = [];
-    if (estadoTemperatura.value !== "normal") motivos.push("temperatura");
-    if (estadoHumedad.value !== "normal") motivos.push("humedad");
-    if (estadoGas.value !== "normal") motivos.push("gas");
-    if (estadoVibracion.value !== "normal") motivos.push("vibración");
-    if (estadoLlama.value !== "normal") motivos.push("llama");
-    if (!motivos.length) return "No hay advertencias";
-    return motivos.join(", ");
+    const activos = {
+        temperatura: estadoTemperatura.value,
+        humedad: estadoHumedad.value,
+        gas: estadoGas.value,
+        vibracion: estadoVibracion.value,
+        llama: estadoLlama.value,
+    };
+
+    const detalles = Object.entries(activos)
+        .filter(([, estado]) => estado !== "normal")
+        .map(([sensor, estado]) => ({ texto: MENSAJES[sensor][estado], estado }))
+        .sort((a, b) => PRIORIDAD[b.estado] - PRIORIDAD[a.estado])
+        .map((d) => d.texto);
+
+    if (!detalles.length) return "Todos los sensores detectan niveles normales";
+    return detalles.join(" · ");
 });
 
 const porcTemp = computed(() => Math.min(100, (temperatura.value / 50) * 100));
