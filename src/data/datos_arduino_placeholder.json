@@ -7,7 +7,7 @@
     "gas": 420
   },
   "llama": {
-    "detectada": false
+    "detectada": true
   },
   "mpu6050": {
     "ax": 0.05,

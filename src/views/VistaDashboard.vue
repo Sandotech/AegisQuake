@@ -99,6 +99,38 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
             </div>
         </section>
 
+        <section class="llama" :class="{ 'llama--activa': llamaConfirmada }">
+            <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+            </svg>
+            <div class="llama__texto">
+                <strong>
+                    {{
+                        llamaConfirmada
+                            ? "¡Fuego detectado!"
+                            : "Sin detección de llama"
+                    }}
+                </strong>
+                <span>
+                    {{
+                        llamaConfirmada
+                            ? "Activa el protocolo de emergencia inmediatamente."
+                            : "El sensor de llama no reporta incendios."
+                    }}
+                </span>
+            </div>
+        </section>
+
         <section class="medidores-grid">
             <MedidorCircular
                 etiqueta="Temperatura"
@@ -167,38 +199,6 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
                         <span class="eje__valor">{{ eje.valor.toFixed(2) }}</span>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="llama" :class="{ 'llama--activa': llamaConfirmada }">
-            <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-            >
-                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-            </svg>
-            <div class="llama__texto">
-                <strong>
-                    {{
-                        llamaConfirmada
-                            ? "¡Fuego detectado!"
-                            : "Sin detección de llama"
-                    }}
-                </strong>
-                <span>
-                    {{
-                        llamaConfirmada
-                            ? "Activa el protocolo de emergencia inmediatamente."
-                            : "El sensor de llama no reporta incendios."
-                    }}
-                </span>
             </div>
         </section>
 
