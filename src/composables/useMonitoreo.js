@@ -33,17 +33,58 @@ const UMBRALES = {
 // Mientras el ESP32 no transmita por WiFi, este composable lee el archivo
 // JSON y le aplica pequeñas variaciones para simular datos en vivo.
 //
-// Cuando se conecte el ESP32:
-//   1) Borra la función `obtenerDatos` (la que está abajo) y reemplázala por:
+// ============================================================================
+// CÓDIGO PARA CONECTAR EL ESP32 USANDO WEBSOCKET
+// ----------------------------------------------------------------------------
+// El ESP32 NO usa HTTP: levanta un servidor WebSocket en el puerto 81 y
+// transmite el JSON cada 200 ms (webSocket.broadcastTXT en su loop()).
+// Para activar la conexión real:
 //
-//      async function obtenerDatos() {
-//          const res = await fetch("http://IP_DEL_ESP32/data"); // ← IP del ESP32
-//          return await res.json();
-//      }
+//   1) Poner la IP generada por el ESP32 en la variable IP_ESP32. El ESP32 la imprime en el
+//      monitor serial: busca la línea "IP del ESP32-S3:". Ej: "ws://192.168.1.50:81"
+//      (Hay que hacer esto )
+//   2) En iniciar(): borrar "aplicarDatos(obtenerDatos())" y el setInterval,
+//      y llamar en su lugar a conectarESP32().
+//   3) En detener(): borrar el clearInterval y descomentar socket.close().
+//   4) Borrar las funciones de simulación: variar() y obtenerDatos().
 //
-//   2) Idealmente la calibración del gas (línea base Ro) se hace en el
-//      propio ESP32, en aire limpio, antes de empezar a transmitir.
-//      Aquí se promedia automáticamente con las primeras lecturas.
+// Idealmente la calibración del gas se hace en el propio
+// ESP32, en aire limpio, antes de empezar a transmitir. Aquí se promedia
+// automáticamente con las primeras lecturas que lleguen por WebSocket.
+// ============================================================================
+
+//DESCOMENTAR CUANDO SE VAYA A CONECTAR EL ESP32
+//EL ESP32 Y EL SISTEMA DEBEN ESTAR EN LA MISMA RED PARA QUE FUNCIONE
+
+// let socket = null; // conexión WebSocket activa
+//
+// function conectarESP32() {
+//     const IP_ESP32 = "ws://192.168.1.50:81"; // ← AQUÍ VA LA IP DEL ESP32
+//     socket = new WebSocket(IP_ESP32);
+//
+//     socket.onopen = () => {
+//         conectado.value = true;
+//     };
+//
+//     socket.onmessage = (evento) => {
+//         try {
+//             aplicarDatos(JSON.parse(evento.data));
+//         } catch (e) {
+//             console.error("JSON inválido del ESP32:", evento.data);
+//         }
+//     };
+//
+//     socket.onerror = () => {
+//         console.error("Error WebSocket con el ESP32");
+//         conectado.value = false;
+//     };
+//
+//     socket.onclose = () => {
+//         conectado.value = false;
+//         // Reintento opcional cada 5 s:
+//         // setTimeout(conectarESP32, 5000);
+//     };
+// }
 
 const temperatura = ref(datosBase.dht.temperatura);
 const humedad = ref(datosBase.dht.humedad);
@@ -197,7 +238,6 @@ const nivelGlobal = computed(() => {
     return "normal";
 });
 
-// Mensajes detallados para el texto pequeño del semáforo.
 const MENSAJES = {
     temperatura: {
         advertencia: "Temperatura por encima de los niveles aceptables",
@@ -249,6 +289,9 @@ const horaActualizacion = computed(() => {
     return ultimaActualizacion.value.toLocaleTimeString("es-VE");
 });
 
+// SIMULACIÓN: temporizador que genera datos falsos cada 2 s.
+// ESP32 REAL: borrar las 4 líneas de abajo (aplicarDatos + setInterval)
+// y llamar solo a conectarESP32() — el socket ya trae datos cada 200 ms.
 function iniciar() {
     if (intervalo) return;
     lecturasCalibracion = [];
@@ -262,11 +305,14 @@ function iniciar() {
     }, INTERVALO_MS);
 }
 
+// SIMULACIÓN: detiene el temporizador.
+// ESP32 REAL: borrar el bloque clearInterval y descomentar socket.close().
 function detener() {
     if (intervalo) {
         clearInterval(intervalo);
         intervalo = null;
     }
+    // if (socket) socket.close();
     conectado.value = false;
 }
 

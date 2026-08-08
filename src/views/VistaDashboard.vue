@@ -189,12 +189,12 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
 
                 <div class="mpu-grupo">
                     <h3 class="mpu-grupo__titulo">
-                        Giroscopio <small>°/s</small>
+                        Giroscopio <small>rad/s</small>
                     </h3>
                     <div v-for="eje in giro" :key="`g-${eje.eje}`" class="eje">
                         <span class="eje__etiqueta">{{ eje.eje }}</span>
                         <div class="eje__barra">
-                            <div class="eje__relleno" :style="barraDe(eje.valor, 2)"></div>
+                            <div class="eje__relleno" :style="barraDe(eje.valor, 0.35)"></div>
                         </div>
                         <span class="eje__valor">{{ eje.valor.toFixed(2) }}</span>
                     </div>
