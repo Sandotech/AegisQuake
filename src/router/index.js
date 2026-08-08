@@ -25,6 +25,12 @@ const routes = [
         component: () => import("@/views/VistaPrincipal.vue"),
         meta: { titulo: "Panel de Monitoreo" },
     },
+    {
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("@/views/VistaDashboard.vue"),
+        meta: { titulo: "Dashboard ESP32" },
+    },
 ];
 
 const router = createRouter({
