@@ -92,7 +92,23 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
         </section>
 
         <section class="semaforo" :class="`semaforo--${nivelGlobal}`">
-            <span class="semaforo__dot" aria-hidden="true"></span>
+            <span class="semaforo__icono" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                    <path v-if="nivelGlobal === 'normal'" d="m9 12 2 2 4-4" />
+                    <template v-else>
+                        <path d="M12 8v4" />
+                        <path d="M12 16h.01" />
+                    </template>
+                </svg>
+            </span>
             <div class="semaforo__texto">
                 <strong class="semaforo__titulo">{{ tituloSemaforo }}</strong>
                 <span class="semaforo__detalle">{{ motivoAlerta }}</span>
@@ -100,19 +116,18 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
         </section>
 
         <section class="llama" :class="{ 'llama--activa': llamaConfirmada }">
-            <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-            >
-                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-            </svg>
+            <span class="llama__icono" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+                </svg>
+            </span>
             <div class="llama__texto">
                 <strong>
                     {{
@@ -352,20 +367,45 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
 .semaforo {
     display: flex;
     align-items: center;
-    gap: var(--espacio-md);
+    gap: var(--espacio-lg);
     border-radius: var(--radio-xl);
-    padding: var(--espacio-md) var(--espacio-lg);
+    padding: var(--espacio-lg) var(--espacio-xl);
     margin-bottom: var(--espacio-xl);
-    border: 1px solid transparent;
+    border: 1px solid var(--color-borde);
+    background: var(--color-superficie);
+    box-shadow: var(--sombra-sm);
+    transition: border-color var(--transicion-normal),
+        box-shadow var(--transicion-normal);
 }
 
-.semaforo__dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: currentColor;
-    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
+.semaforo__icono {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radio-lg);
+    display: grid;
+    place-items: center;
+    background: var(--color-exito-claro);
+    color: var(--color-exito-oscuro);
     flex-shrink: 0;
+    transition: background var(--transicion-normal),
+        color var(--transicion-normal), box-shadow var(--transicion-normal);
+}
+
+.semaforo__icono svg {
+    width: 30px;
+    height: 30px;
+}
+
+.semaforo--advertencia .semaforo__icono {
+    background: var(--color-advertencia-claro);
+    color: var(--color-advertencia-oscuro);
+}
+
+.semaforo--critico .semaforo__icono {
+    background: var(--color-critico-claro);
+    color: var(--color-critico-oscuro);
+    box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.15),
+        0 6px 18px rgba(229, 57, 53, 0.35);
 }
 
 .semaforo__texto {
@@ -384,36 +424,42 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
 .semaforo__detalle {
     font-size: 0.85rem;
     font-weight: 500;
-    opacity: 0.9;
+    color: var(--color-texto-secundario);
 }
 
 .semaforo--normal {
-    background: var(--color-exito-claro);
-    color: var(--color-exito-oscuro);
     border-color: var(--color-exito);
 }
 
+.semaforo--normal .semaforo__titulo {
+    color: var(--color-exito-oscuro);
+}
+
 .semaforo--advertencia {
-    background: var(--color-advertencia-claro);
-    color: var(--color-advertencia-oscuro);
     border-color: var(--color-advertencia);
 }
 
+.semaforo--advertencia .semaforo__titulo {
+    color: var(--color-advertencia-oscuro);
+}
+
 .semaforo--critico {
-    background: var(--color-critico-claro);
-    color: var(--color-critico-oscuro);
     border-color: var(--color-critico);
 }
 
-:global([data-theme="dark"]) .semaforo--normal {
+.semaforo--critico .semaforo__titulo {
+    color: var(--color-critico-oscuro);
+}
+
+:global([data-theme="dark"]) .semaforo--normal .semaforo__titulo {
     color: #81c784;
 }
 
-:global([data-theme="dark"]) .semaforo--advertencia {
+:global([data-theme="dark"]) .semaforo--advertencia .semaforo__titulo {
     color: #ffe082;
 }
 
-:global([data-theme="dark"]) .semaforo--critico {
+:global([data-theme="dark"]) .semaforo--critico .semaforo__titulo {
     color: #ef9a9a;
 }
 
@@ -533,16 +579,44 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
     gap: var(--espacio-md);
     border-radius: var(--radio-xl);
     padding: var(--espacio-lg) var(--espacio-xl);
-    background: var(--color-exito-claro);
-    border: 1px solid var(--color-exito);
-    color: var(--color-exito-oscuro);
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto);
     margin-bottom: var(--espacio-xl);
+    box-shadow: var(--sombra-sm);
+    transition: border-color var(--transicion-normal),
+        box-shadow var(--transicion-normal);
 }
 
 .llama--activa {
-    background: var(--color-critico-claro);
     border-color: var(--color-critico);
-    color: var(--color-critico-oscuro);
+    box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1), var(--sombra-md);
+}
+
+.llama__icono {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radio-lg);
+    display: grid;
+    place-items: center;
+    background: var(--color-exito-claro);
+    color: var(--color-exito-oscuro);
+    flex-shrink: 0;
+    transition: background var(--transicion-normal),
+        color var(--transicion-normal);
+}
+
+.llama__icono svg {
+    width: 28px;
+    height: 28px;
+}
+
+.llama--activa .llama__icono {
+    background: linear-gradient(135deg, #ff9800, var(--color-critico));
+    color: #fff;
+    box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.15),
+        0 6px 18px rgba(229, 57, 53, 0.35);
+    animation: llama-fuego 0.8s ease-in-out infinite;
 }
 
 .llama__texto {
@@ -560,15 +634,31 @@ const histVibracion = computed(() => historial.value.map((h) => h.vibracion));
 .llama__texto span {
     font-size: 0.85rem;
     font-weight: 500;
-    opacity: 0.9;
+    color: var(--color-texto-secundario);
+}
+
+@keyframes llama-fuego {
+    0%,
+    100% {
+        transform: scale(1) rotate(-3deg);
+    }
+    25% {
+        transform: scale(1.07) rotate(2deg);
+    }
+    50% {
+        transform: scale(0.96) rotate(-2deg);
+    }
+    75% {
+        transform: scale(1.05) rotate(3deg);
+    }
 }
 
 :global([data-theme="dark"]) .llama {
-    color: #81c784;
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 :global([data-theme="dark"]) .llama--activa {
-    color: #ef9a9a;
+    border-color: var(--color-critico);
 }
 
 .tendencias-grid {
